@@ -50,7 +50,7 @@ void servotest() {
   }
 
 }
-}
+};
 
 void setup() {
   // Switch and servo utilization//
