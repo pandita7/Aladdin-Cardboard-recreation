@@ -1,34 +1,70 @@
-void setup() {
-  // I like pie
-// *****This part has been added to the commit*****
-int led = 9;           // the PWM pin the LED is attached to
-int brightness = 0;    // how bright the LED is
-int fadeAmount = 5;    // how many points to fade the LED by
+#include <Servo.h>
+Servo myservo;  
+Servo myservo2;
+Servo myservo3
+int pos1 = 0;  
+int pos2 = 0;
+int pos3 = 0; 
 
-// the setup routine runs once when you press reset:
-void setup() {
-  // declare pin 9 to be an output:
-  pinMode(led, OUTPUT);
-}
+//Copper Switches and their states //
+int Switch1 = 3;
+int Switch2 = 4;
+int Switch3 = 5;
+int Switch4 = 6;
+int Switch5 = 7
+int s1state = 0;
+int s2state = 0;
+int s3state = 0;
+int s4state = 0;
+int s5state = 0; 
+//
 
-// the loop routine runs over and over again forever:
-void loop() {
-  // set the brightness of pin 9:
-  analogWrite(led, brightness);
-
-  // change the brightness for next time through the loop:
-  brightness = brightness + fadeAmount;
-
-  // reverse the direction of the fading at the ends of the fade:
-  if (brightness <= 0 || brightness >= 255) {
-    fadeAmount = -fadeAmount;
+//Switch test for debug and copper contact//
+void switchtest() {
+   s1state = digitalRead(Switch1); 
+   Serial.println( s1state); 
+   delay(300);
+    s2state = digitalRead(Switch2); 
+   Serial.println( s2state);
+   delay(300);
+    s3state = digitalRead(Switch3); 
+   Serial.println( s3state);
+   delay(300);
+    s4state = digitalRead(Switch4); 
+   Serial.println( s4state);
+   delay(300);
+    s5state = digitalRead(Switch5); 
+   Serial.println( s5state);
+   delay(300);  
+};
+// test servo functions and movement//
+void servotest() {
+   for (pos1 = 0; pos1 <= 180; pos1 += 1) { // goes from 0 degrees to 180 degrees
+    // in steps of 1 degree
+    myservo.write(pos1);              // tell servo to go to position in variable 'pos'
+    delay(15);                       // waits 15ms for the servo to reach the position
   }
-  // wait for 30 milliseconds to see the dimming effect
-  delay(30);
-}
-void loop() {
-  // put your main code here, to run repeatedly:
- 
-  // Test comment
+  for (pos1 = 180; pos1 >= 0; pos -= 1) { // goes from 180 degrees to 0 degrees
+    myservo.write(pos1);              // tell servo to go to position in variable 'pos'
+    delay(15);                       // waits 15ms for the servo to reach the position
+  }
 
+}
+}
+
+void setup() {
+  // Switch and servo utilization//
+  myservo.attach(6);  // attaches the servo on pin 9 to the servo object
+  pinMode(Switch1, INPUT);
+  pinMode(Switch2, INPUT);
+  pinMode(Switch3, INPUT);
+  pinMode(Switch4, INPUT);
+  pinMode(Switch5, INPUT);
+  Serial.begin(9600); 
+
+}
+
+void loop() {
+switchtest();
+servotest();
 }
