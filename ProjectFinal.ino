@@ -1,137 +1,179 @@
-//servo configuration//
-#include <Servo.h>
-Servo myservo;  
-Servo myservo2;
-Servo myservo3
-int pos1 = 0;  
-int pos2 = 0;
-int pos3 = 0; 
+/* Sweep
+ by BARRAGAN <http://barraganstudio.com>
+ This example code is in the public domain.
 
-//Copper Switches and their states //
-int Switch1 = 3;
-int Switch2 = 4;
-int Switch3 = 5;
-int Switch4 = 6;
-int Switch5 = 7
+ modified 8 Nov 2013
+ by Scott Fitzgerald
+ https://www.arduino.cc/en/Tutorial/LibraryExamples/Sweep
+*/
+
+#include <Servo.h>
+int s1 = 1;//1 door switch to motor 1
+int s2 = 2; //tied to motor 2
+int s3 = 3;// 2 door switch
+int s4 = 5;//tied to motor 3
+int s5 = 4;// 3 door switch
+int s6 = 6;//interaction tied to motor 4(ruby)
+int s7 = 7;// 4 door switch
+int s8 = 8;// interaction to motor 5
+int m1 = 9;//servo 1
+int m2 = 10;//servo 2
+int m3 = 11;//servo 3
+int m4 = 12;//servo 4
+int m5 = 13;//servo 5
+//switch states
 int s1state = 0;
 int s2state = 0;
 int s3state = 0;
 int s4state = 0;
 int s5state = 0;
- 
-//checks for chronological sequence for proper story progression
-int check1 = 0;
-int check2 = 0;
-//disables sequences to overall code as interactions happen
-int disable1 = 0;
-int disable2 = 0;
-int disable3 = 0;
+int s6state = 0;
+int s7state = 0;
+int s8state = 0;
+
+//disables interactions
+int d1 = 0;
+int d2 = 0;
+int d3 = 0;
+int d4 = 0;
+//disables for mid interactions
+int d22 = 0;
+int pindisable = 0;
+int pindisable2 = 0;
+// for loop variable
+int i;
 
 
+Servo myservo;  // create servo object to control a servo
+// twelve servo objects can be created on most boards
+Servo myservo2;
+Servo myservo3;
+Servo myservo4;
+Servo myservo5;
 
-//Switch test for debug and copper contact//
-void switchtest() {
-   s1state = digitalRead(Switch1); 
-   Serial.println( s1state); 
-   delay(300);
-    s2state = digitalRead(Switch2); 
-   Serial.println( s2state);
-   delay(300);
-    s3state = digitalRead(Switch3); 
-   Serial.println( s3state);
-   delay(300);
-    s4state = digitalRead(Switch4); 
-   Serial.println( s4state);
-   delay(300);
-    s5state = digitalRead(Switch5); 
-   Serial.println( s5state);
-   delay(300);  
-};
-// test servo functions and movement//
-void servotest() {
-   for (pos1 = 0; pos1 <= 180; pos1 += 1) { // goes from 0 degrees to 180 degrees
-    // in steps of 1 degree
-    myservo.write(pos1);              // tell servo to go to position in variable 'pos'
-    delay(15);                       // waits 15ms for the servo to reach the position
-  }
-  for (pos1 = 180; pos1 >= 0; pos1 -= 1) { // goes from 180 degrees to 0 degrees
-    myservo.write(pos1);              // tell servo to go to position in variable 'pos'
-    delay(15);                       // waits 15ms for the servo to reach the position
-  }
-
-}
-};
-
-///Scene sequences///
-void sequence1() {    //sequence one involves the first panel scene where one motor reveals character and the other controls the trap door
-  s1state = digitalRead(Switch1); //controls door one magnet switch to servo reveal
-  s2state = digitalRead(Switch2); //controls character to trap door
-  if (s1state == HIGH && check1 == 0) {
-    for (pos1 = 0; pos1 <= 90; pos1 += 1) { // goes from 0 degrees to 90 degrees
-    // in steps of 1 degree
-    myservo.write(pos1);              // tell servo to go to position in variable 'pos'
-    delay(15);                       // waits 15ms for the servo to reach the position
-  }
-   for (pos1 = 90; pos1 >= 0; pos1 -= 1) { // goes from 90 degrees to 0 degrees
-    myservo.write(pos1);              // tell servo to go to position in variable 'pos'
-    delay(15);                       // waits 15ms for the servo to reach the position
-    check1 = 1;
-  }
-  }
-  if (s2state == HIGH && check1 == 1) { //if character is on top of trap door
-        for (pos1 = 0; pos1 <= 90; pos1 += 1) { // goes from 0 degrees to 90 degrees
-    // in steps of 1 degree
-    myservo2.write(pos2);              // tell servo to go to position in variable 'pos'
-    delay(15);                       // waits 15ms for the servo to reach the position
-  }
-   for (pos2 = 90; pos2 >= 0; pos2 -= 1) { // goes from 90 degrees to 0 degrees
-    myservo2.write(pos2);              // tell servo to go to position in variable 'pos'
-    delay(15);                       // waits 15ms for the servo to reach the position
-  }
-  }
-  disable1 = 1;
-}; 
-
-void sequence2() { //second panel where magic carpet and alladin is involved to interact with enviroment 
-  s3state = digitalRead(Switch3); //controls trap door on second panel
-  s4state = digitalRead(Switch4); //controls interaction 
-  if (s3state == HIGH) { //if character is ontop of trap door
-        for (pos3 = 0; pos3 <= 90; pos3 += 1) { // goes from 0 degrees to 90 degrees
-    // in steps of 1 degree
-    myservo3.write(pos3);              // tell servo to go to position in variable 'pos'
-    delay(15);                       // waits 15ms for the servo to reach the position
-  }
-   for (pos3 = 90; pos3 >= 0; pos3 -= 1) { // goes from 90 degrees to 0 degrees
-    myservo3.write(pos3);              // tell servo to go to position in variable 'pos'
-    delay(15);                       // waits 15ms for the servo to reach the position
-  }
-  }
-};
-
-
+int pos = 0;    // variable to store the servo position
+int pos2 = 0;
+int pos3 = 0;
+int pos4 = 0;
+int pos5 = 0;
 
 void setup() {
-  // Switch and servo utilization//
-  myservo.attach(6);  // attaches the servo on pin 9 to the servo object
-  pinMode(Switch1, INPUT);
-  pinMode(Switch2, INPUT);
-  pinMode(Switch3, INPUT);
-  pinMode(Switch4, INPUT);
-  pinMode(Switch5, INPUT);
-  Serial.begin(9600); 
+  myservo.attach(9);  // attaches the servo on pin 9 to the servo object
+  myservo2.attach(10);
+  myservo3.attach(11);
+  myservo4.attach(12);
+  myservo5.attach(13);
 
+   pinMode(A0, INPUT);
+   pinMode(s2, INPUT);
+   pinMode(s3, INPUT);
+   pinMode(s4, INPUT);
+   pinMode(s5, INPUT);
+   pinMode(s6, INPUT);
+   pinMode(s7, INPUT);
+   pinMode(s8, INPUT);
+   Serial.begin(9600);
+    
 }
 
 void loop() {
-switchtest();
-servotest();
-if (s1state == HIGH && s2state == HIGH && s3state == HIGH && s4state == HIGH && s5state == HIGH) { //allows the sequences to run only if the panels and servos are at their right position 
-  if (disable1 == 0) { //checks if sequence was previously ran
-  sequence1();
+  //tie in state to pin
+  s1state = digitalRead(A0);
+  s2state = digitalRead(s2);
+  s3state = digitalRead(s3);
+  s4state = digitalRead(s4);
+  s5state = digitalRead(s5);
+  s6state = digitalRead(s6);
+  s7state = digitalRead(s7);
+  s8state = digitalRead(s8);
+  if (pindisable == 0){
+   pos = 200;
+myservo.write(pos); 
+  pos2 = 160;
+myservo2.write(pos2);
+  pos3 = 0;
+myservo3.write(pos3); 
+  pos4 = 80;
+myservo4.write(pos4);
+ pos5 = 10;
+myservo5.write(pos5);
+pindisable = 1;
+Serial.println("motor check " );
   }
-  if (disable1 == 1 && disable2 == 0) {
-  sequence2();
+  //// Panel 1
+  if (s1state == LOW && d1 == 0) {
+    Serial.println("button pressed 1 " ) ;
+delay(2000);
+pos = 90;
+myservo.write(pos);
+d1 = 1;
   }
+  //// Panel 2
+  if (s3state == LOW && d1 == 1 && d2 == 0) {
+     Serial.println("panel 2 " ) ;
+    if (s2state == HIGH) {
+pos2 = 100;
+myservo2.write(pos2);
+  delay(8000);
+  pos2 = 160;
+myservo2.write(pos2);
+  d2 = 1;
+    }
+  }
+    if (s4state == HIGH && d22 == 0 && d2 == 1) {
+   delay(3000);
+pos3 = 100;
+myservo3.write(pos3);
+  delay(9000);
+  pos3 = 0;
+myservo3.write(pos3);
+  d22 = 1;
+    }
   
-} 
+  //// Panel 3
+  if (s3state == HIGH && d1 == 1 && d2 == 1 && d3 == 0) {
+    Serial.println("motor show " ) ;
+    if (pindisable2 == 0) {
+  delay(3000);
+pos3 = 50;
+myservo3.write(pos3);
+  delay(9000);
+  pos3 = 0;
+myservo3.write(pos3);
+ Serial.println("retract " ) ;
+ Serial.println("motor gone " ) ;
+pindisable2 = 1;
+    }
+    if (s6state == LOW) {
+     Serial.println("volcanic" ) ; 
+  delay(3000);
+pos4 = 80;
+myservo4.write(pos4);
+  delay(4000);
+for (i = 0; i < 30; i++) {
+  pos4 = pos4 - 3;
+myservo4.write(pos4);
+delay(500);
+d3 = 1;
+}
+    }
+  }
+  //// Panel 4
+  if (s7state == LOW && d1 == 1 && d2 == 1 && d3 == 1 && d4 == 0) {
+    Serial.println("panel 4" ) ;
+    if (s8state == HIGH) {
+       Serial.println("Genie" ) ;
+pos5 = 100;
+myservo5.write(pos5);
+delay(1000);
+pos5 = 50;
+myservo5.write(pos5);
+delay(1000);
+pos5 = 100;
+myservo5.write(pos5);
+d4 = 1;
+      }
+      
+    }
+  ////
 }
