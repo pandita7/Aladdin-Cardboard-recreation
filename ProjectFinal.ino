@@ -1,11 +1,4 @@
-/* Sweep
- by BARRAGAN <http://barraganstudio.com>
- This example code is in the public domain.
-
- modified 8 Nov 2013
- by Scott Fitzgerald
- https://www.arduino.cc/en/Tutorial/LibraryExamples/Sweep
-*/
+//Cardboard Project Code By Daniel Zuniga///
 
 #include <Servo.h>
 int s1 = 1;//1 door switch to motor 1
