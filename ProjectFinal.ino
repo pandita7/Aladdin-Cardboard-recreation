@@ -1,4 +1,4 @@
-//Cardboard Project code by Daniel Zuniga//
+//Cardboard Code project//
 
 #include <Servo.h>
 //copper tape switch pinout
@@ -149,18 +149,20 @@ pindisable2 = 1;
     //activates servo panel to show the volcano scene//
     if (s6state == LOW) {
      Serial.println("volcanic" ) ; 
-  delay(3000);
+  delay(1000);
 pos4 = 80;
 myservo4.write(pos4);
-  delay(4000);
+delay(500);
+pos4 = 60;
+myservo4.write(pos4);
+delay(500);
+pos4 = 80;
+myservo4.write(pos4);
+  delay(1000);
 for (i = 0; i < 30; i++) {
   pos4 = pos4 - 3;
 myservo4.write(pos4);
 delay(500);
-digitalWrite(A1, HIGH); //vibrate
-  delay(500);  // delay one second
-  digitalWrite(A1, LOW);  //stop vibrating
-  delay(500); //wait 50 seconds.
 d3 = 1;
 }
     }
