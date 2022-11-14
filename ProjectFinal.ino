@@ -1,6 +1,14 @@
-//Cardboard Project Code By Daniel Zuniga///
+/* Sweep
+ by BARRAGAN <http://barraganstudio.com>
+ This example code is in the public domain.
+
+ modified 8 Nov 2013
+ by Scott Fitzgerald
+ https://www.arduino.cc/en/Tutorial/LibraryExamples/Sweep
+*/
 
 #include <Servo.h>
+//copper tape switch pinout
 int s1 = 1;//1 door switch to motor 1
 int s2 = 2; //tied to motor 2
 int s3 = 3;// 2 door switch
@@ -36,9 +44,11 @@ int pindisable2 = 0;
 // for loop variable
 int i;
 
+//Extra Rumble motor pinout
+int rumble;
 
-Servo myservo;  // create servo object to control a servo
-// twelve servo objects can be created on most boards
+//servos
+Servo myservo; 
 Servo myservo2;
 Servo myservo3;
 Servo myservo4;
@@ -56,7 +66,7 @@ void setup() {
   myservo3.attach(11);
   myservo4.attach(12);
   myservo5.attach(13);
-
+//Pin utilization//
    pinMode(A0, INPUT);
    pinMode(s2, INPUT);
    pinMode(s3, INPUT);
@@ -66,6 +76,9 @@ void setup() {
    pinMode(s7, INPUT);
    pinMode(s8, INPUT);
    Serial.begin(9600);
+   //Rumble utilization
+   pinMode(A1, OUTPUT);
+   //
     
 }
 
@@ -79,6 +92,8 @@ void loop() {
   s6state = digitalRead(s6);
   s7state = digitalRead(s7);
   s8state = digitalRead(s8);
+  //
+  //Checks if servos are at their starting positions//
   if (pindisable == 0){
    pos = 200;
 myservo.write(pos); 
@@ -91,9 +106,9 @@ myservo4.write(pos4);
  pos5 = 10;
 myservo5.write(pos5);
 pindisable = 1;
-Serial.println("motor check " );
+Serial.println("Servo check " );
   }
-  //// Panel 1
+  //// Panel 1 interaction
   if (s1state == LOW && d1 == 0) {
     Serial.println("button pressed 1 " ) ;
 delay(2000);
@@ -101,7 +116,7 @@ pos = 90;
 myservo.write(pos);
 d1 = 1;
   }
-  //// Panel 2
+  //// Panel 2 interaction
   if (s3state == LOW && d1 == 1 && d2 == 0) {
      Serial.println("panel 2 " ) ;
     if (s2state == HIGH) {
@@ -113,6 +128,7 @@ myservo2.write(pos2);
   d2 = 1;
     }
   }
+  //Additional fail safe to make sure servo activates
     if (s4state == HIGH && d22 == 0 && d2 == 1) {
    delay(3000);
 pos3 = 100;
@@ -123,7 +139,7 @@ myservo3.write(pos3);
   d22 = 1;
     }
   
-  //// Panel 3
+  //// Panel 3 interaction
   if (s3state == HIGH && d1 == 1 && d2 == 1 && d3 == 0) {
     Serial.println("motor show " ) ;
     if (pindisable2 == 0) {
@@ -137,6 +153,7 @@ myservo3.write(pos3);
  Serial.println("motor gone " ) ;
 pindisable2 = 1;
     }
+    //activates servo panel to show the volcano scene//
     if (s6state == LOW) {
      Serial.println("volcanic" ) ; 
   delay(3000);
@@ -147,11 +164,15 @@ for (i = 0; i < 30; i++) {
   pos4 = pos4 - 3;
 myservo4.write(pos4);
 delay(500);
+digitalWrite(A1, HIGH); //vibrate
+  delay(500);  // delay one second
+  digitalWrite(A1, LOW);  //stop vibrating
+  delay(500); //wait 50 seconds.
 d3 = 1;
 }
     }
   }
-  //// Panel 4
+  //// Panel 4 interaction
   if (s7state == LOW && d1 == 1 && d2 == 1 && d3 == 1 && d4 == 0) {
     Serial.println("panel 4" ) ;
     if (s8state == HIGH) {
