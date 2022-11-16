@@ -1,4 +1,4 @@
-//Cardboard Code project//
+//Cardboard Code by Daniel Zuniga//
 
 #include <Servo.h>
 //copper tape switch pinout
@@ -115,7 +115,7 @@ d1 = 1;
     if (s2state == HIGH) {
 pos2 = 100;
 myservo2.write(pos2);
-  delay(8000);
+  delay(15000);
   pos2 = 160;
 myservo2.write(pos2);
   d2 = 1;
@@ -150,6 +150,7 @@ pindisable2 = 1;
     if (s6state == LOW) {
      Serial.println("volcanic" ) ; 
   delay(1000);
+  //indicator for quick timed event to put alladin into the slider//
 pos4 = 80;
 myservo4.write(pos4);
 delay(500);
@@ -158,16 +159,26 @@ myservo4.write(pos4);
 delay(500);
 pos4 = 80;
 myservo4.write(pos4);
+pos4 = 80;
+myservo4.write(pos4);
+delay(500);
+pos4 = 60;
+myservo4.write(pos4);
+delay(500);
+pos4 = 80;
+//
+myservo4.write(pos4);
   delay(1000);
+  //Timer to engage the next panel, 15 seconds given to snap alldin to the magnet and move him down towards the last interaction//
 for (i = 0; i < 30; i++) {
   pos4 = pos4 - 3;
 myservo4.write(pos4);
-delay(500);
+delay(1000);
 d3 = 1;
 }
     }
   }
-  //// Panel 4 interaction
+  //// Panel 4 interaction//
   if (s7state == LOW && d1 == 1 && d2 == 1 && d3 == 1 && d4 == 0) {
     Serial.println("panel 4" ) ;
     if (s8state == HIGH) {
@@ -180,9 +191,17 @@ myservo5.write(pos5);
 delay(1000);
 pos5 = 100;
 myservo5.write(pos5);
+pos5 = 100;
+myservo5.write(pos5);
+delay(1000);
+pos5 = 50;
+myservo5.write(pos5);
+delay(1000);
+pos5 = 100;
+myservo5.write(pos5);
 d4 = 1;
       }
       
     }
-  ////
+  ////End of Sequence and play
 }
