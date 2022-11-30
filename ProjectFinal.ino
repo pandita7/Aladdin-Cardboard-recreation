@@ -1,7 +1,7 @@
 //Cardboard Code by Daniel Zuniga//
 
 #include <Servo.h>
-//copper tape switch pinout
+//copper tape switch pinout for interactions//
 int s1 = 1;//1 door switch to motor 1
 int s2 = 2; //tied to motor 2
 int s3 = 3;// 2 door switch
@@ -15,7 +15,7 @@ int m2 = 10;//servo 2
 int m3 = 11;//servo 3
 int m4 = 12;//servo 4
 int m5 = 13;//servo 5
-//switch states
+//switch states to determine on or off status for copper switches 
 int s1state = 0;
 int s2state = 0;
 int s3state = 0;
@@ -25,19 +25,19 @@ int s6state = 0;
 int s7state = 0;
 int s8state = 0;
 
-//disables interactions
+//counter for disableling interactions as they happen 
 int d1 = 0;
 int d2 = 0;
 int d3 = 0;
 int d4 = 0;
-//disables for mid interactions
+//counter disables for mid interactions and fail safes 
 int d22 = 0;
 int pindisable = 0;
 int pindisable2 = 0;
 // for loop variable
 int i;
 
-//Extra Rumble motor pinout
+//Extra Rumble motor pinout for optional addon
 int rumble;
 
 //servos
@@ -47,7 +47,8 @@ Servo myservo3;
 Servo myservo4;
 Servo myservo5;
 
-int pos = 0;    // variable to store the servo position
+// variable to store the servo position
+int pos = 0;    
 int pos2 = 0;
 int pos3 = 0;
 int pos4 = 0;
@@ -69,7 +70,7 @@ void setup() {
    pinMode(s7, INPUT);
    pinMode(s8, INPUT);
    Serial.begin(9600);
-   //Rumble utilization
+   //Optional Rumble utilization
    pinMode(A1, OUTPUT);
    //
     
@@ -86,7 +87,7 @@ void loop() {
   s7state = digitalRead(s7);
   s8state = digitalRead(s8);
   //
-  //Checks if servos are at their starting positions//
+  //Checks if servos are at their starting positions and corrects them at each reset from power//
   if (pindisable == 0){
    pos = 200;
 myservo.write(pos); 
@@ -99,18 +100,18 @@ myservo4.write(pos4);
  pos5 = 10;
 myservo5.write(pos5);
 pindisable = 1;
-Serial.println("Servo check " );
+Serial.println("Servo check clear! " );
   }
   //// Panel 1 interaction
-  if (s1state == LOW && d1 == 0) {
-    Serial.println("button pressed 1 " ) ;
+  if (s1state == LOW && d1 == 0) { //checks for panel being opened from magnet 
+    Serial.println("button pressed 1 " ) ; 
 delay(2000);
 pos = 90;
 myservo.write(pos);
 d1 = 1;
   }
   //// Panel 2 interaction
-  if (s3state == LOW && d1 == 1 && d2 == 0) {
+  if (s3state == LOW && d1 == 1 && d2 == 0) { //checks for previous panel open and second panel open
      Serial.println("panel 2 " ) ;
     if (s2state == HIGH) {
 pos2 = 100;
@@ -121,7 +122,7 @@ myservo2.write(pos2);
   d2 = 1;
     }
   }
-  //Additional fail safe to make sure servo activates
+  //Additional fail safe to make sure servo activates if previous function fails to operate due to loose copper contact//
     if (s4state == HIGH && d22 == 0 && d2 == 1) {
    delay(3000);
 pos3 = 100;
@@ -134,7 +135,8 @@ myservo3.write(pos3);
   
   //// Panel 3 interaction
   if (s3state == HIGH && d1 == 1 && d2 == 1 && d3 == 0) {
-    Serial.println("motor show " ) ;
+    Serial.println("motor show " ) ; //debug print to determine functional motor
+    //disables previous instances from the other interactions//
     if (pindisable2 == 0) {
   delay(3000);
 pos3 = 50;
@@ -166,10 +168,10 @@ pos4 = 60;
 myservo4.write(pos4);
 delay(500);
 pos4 = 80;
-//
+// servo begins timer and decension
 myservo4.write(pos4);
   delay(1000);
-  //Timer to engage the next panel, 15 seconds given to snap alldin to the magnet and move him down towards the last interaction//
+  //Timer to engage the next panel, 15 seconds given to grab alladin and chuck him down towards the last interaction//
 for (i = 0; i < 30; i++) {
   pos4 = pos4 - 3;
 myservo4.write(pos4);
@@ -179,10 +181,11 @@ d3 = 1;
     }
   }
   //// Panel 4 interaction//
-  if (s7state == LOW && d1 == 1 && d2 == 1 && d3 == 1 && d4 == 0) {
+  if (s7state == LOW && d1 == 1 && d2 == 1 && d3 == 1 && d4 == 0) { //checks for previous 3 interactions and current 4th panel magnet contact
     Serial.println("panel 4" ) ;
     if (s8state == HIGH) {
-       Serial.println("Genie" ) ;
+       Serial.println("Genie" ) ; //debug to check genie interaction activation
+ //Genie pop up function used to show the genie appearing from the magnet interaction from the fourth panel//
 pos5 = 100;
 myservo5.write(pos5);
 delay(1000);
@@ -196,8 +199,8 @@ myservo5.write(pos5);
 delay(1000);
 pos5 = 50;
 myservo5.write(pos5);
-delay(1000);
-pos5 = 100;
+delay(2000);
+pos5 = 80;
 myservo5.write(pos5);
 d4 = 1;
       }
