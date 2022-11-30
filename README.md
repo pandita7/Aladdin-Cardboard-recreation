@@ -1,5 +1,5 @@
 # Cardboard-Control-Code
-Code for cardboard contraption pertaining to the story of Alladin, slightly cut down narrative but consistent in sttory with the movie 1992
+Code for cardboard contraption pertaining to the story of Alladin, slightly cut down narrative but consistent in story with the 1992 Movie
 
 Team Members: Daniel, Ishan, Vinay
 
