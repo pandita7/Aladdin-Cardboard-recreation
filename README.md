@@ -4,7 +4,6 @@ Code for cardboard contraption pertaining to the story of Alladin, slightly cut 
 Team Members: Daniel, Ishan, Vinay
 
 Enclosure Specifications:
-Rumble Motor(added for "volcano" event)
 Copper Switches = 8
 Servos = 5
 Interactions = 9
@@ -15,6 +14,6 @@ Materials:
 - Magnets
 - Alligator clips
 - copper tape
-- rumble motor
+- breadboards
 
 
